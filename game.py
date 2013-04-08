@@ -1,6 +1,4 @@
-import sys
 import collections
-import time
 import random
 import pygame
 
@@ -12,14 +10,7 @@ class Directions:
     Up, Down, Left, Right = range(4)
 
 
-def prettyprint(x):
-    for row in x:
-        for col in row:
-            print(col, end='')
-        print(end='\n')
-
-
-def findFood(spots):
+def find_food(spots):
     while True:
         food = random.randrange(BOARD_LENGTH), random.randrange(BOARD_LENGTH)
         if (not (spots[food[0]][food[1]] == 1 or
@@ -28,7 +19,7 @@ def findFood(spots):
     return food
 
 
-def endCondition(board, coord):
+def end_condition(board, coord):
     if (coord[0] < 0 or coord[0] >= BOARD_LENGTH or coord[1] < 0 or
             coord[1] >= BOARD_LENGTH):
         return True
@@ -37,7 +28,7 @@ def endCondition(board, coord):
     return False
 
 
-def updateBoard(screen, snake, food):
+def update_board(screen, snake, food):
     white = (255, 255, 255)
     black = (0, 0, 0)
 
@@ -81,7 +72,7 @@ def main():
     snake = collections.deque()
     snake.append((0, 0))
     spots[0][0] = 1
-    food = findFood(spots)
+    food = find_food(spots)
     spots[food[0]][food[1]] = 2
 
     while True:
@@ -106,24 +97,24 @@ def main():
         # Game logic
         head = snake.pop()
         if (direction == Directions.Up):
-            nextHead = (head[0] - 1, head[1])
+            next_head = (head[0] - 1, head[1])
         elif (direction == Directions.Down):
-            nextHead = (head[0] + 1, head[1])
+            next_head = (head[0] + 1, head[1])
         elif (direction == Directions.Left):
-            nextHead = (head[0], head[1] - 1)
+            next_head = (head[0], head[1] - 1)
         elif (direction == Directions.Right):
-            nextHead = (head[0], head[1] + 1)
-        if (endCondition(spots, nextHead)):
-            print(nextHead)
+            next_head = (head[0], head[1] + 1)
+        if (end_condition(spots, next_head)):
+            print(next_head)
             print("end condition reached")
             break
 
-        if spots[nextHead[0]][nextHead[1]] == 2:
+        if spots[next_head[0]][next_head[1]] == 2:
             tailmax += 4
-            food = findFood(spots)
+            food = find_food(spots)
 
         snake.append(head)
-        snake.append(nextHead)
+        snake.append(next_head)
 
         if len(snake) > tailmax:
             tail = snake.popleft()
@@ -133,7 +124,7 @@ def main():
         white = (255, 255, 255)
         screen.fill(white)  # makes screen white
 
-        spots = updateBoard(screen, snake, food)
+        spots = update_board(screen, snake, food)
 
 #        pygame.draw.line(screen, white, (60, 60), (120, 60), 4)
         pygame.display.update()
