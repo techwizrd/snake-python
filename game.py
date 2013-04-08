@@ -1,4 +1,4 @@
-import collections
+from collections import deque, namedtuple
 import random
 import pygame
 
@@ -6,8 +6,11 @@ BOARD_LENGTH = 32
 OFFSET = 16
 
 
-class Directions:
-    Up, Down, Left, Right = range(4)
+#class DIRECTIONS:
+#    Up, Down, Left, Right = range(4)
+
+DIRECTIONS = namedtuple('DIRECTIONS',
+                        ['Up', 'Down', 'Left', 'Right'])(0, 1, 2, 3)
 
 
 def find_food(spots):
@@ -68,8 +71,8 @@ def main():
 
     # Board set up
     tailmax = 4
-    direction = Directions.Right
-    snake = collections.deque()
+    direction = DIRECTIONS.Right
+    snake = deque()
     snake.append((0, 0))
     spots[0][0] = 1
     food = find_food(spots)
@@ -84,25 +87,25 @@ def main():
                 done = True
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP:
-                    direction = Directions.Up
+                    direction = DIRECTIONS.Up
                 elif event.key == pygame.K_DOWN:
-                    direction = Directions.Down
+                    direction = DIRECTIONS.Down
                 elif event.key == pygame.K_RIGHT:
-                    direction = Directions.Right
+                    direction = DIRECTIONS.Right
                 elif event.key == pygame.K_LEFT:
-                    direction = Directions.Left
+                    direction = DIRECTIONS.Left
         if done:
             break
 
         # Game logic
         head = snake.pop()
-        if (direction == Directions.Up):
+        if (direction == DIRECTIONS.Up):
             next_head = (head[0] - 1, head[1])
-        elif (direction == Directions.Down):
+        elif (direction == DIRECTIONS.Down):
             next_head = (head[0] + 1, head[1])
-        elif (direction == Directions.Left):
+        elif (direction == DIRECTIONS.Left):
             next_head = (head[0], head[1] - 1)
-        elif (direction == Directions.Right):
+        elif (direction == DIRECTIONS.Right):
             next_head = (head[0], head[1] + 1)
         if (end_condition(spots, next_head)):
             print(next_head)
